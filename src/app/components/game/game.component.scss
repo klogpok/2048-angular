@@ -1,0 +1,130 @@
+.game-container {
+    margin-top: 20px;
+    position: relative;
+    padding: 10px;
+    cursor: default;
+    background: #bbada0;
+    color: #776e65;
+    border-radius: 3px;
+    box-sizing: border-box;
+
+    .grid-container {
+        .grid-row {
+            display: flex;
+            margin-bottom: 10px;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+
+            .grid-cell {
+                width: 100px;
+                height: 100px;
+                margin-right: 10px;
+                border-radius: 3px;
+                background: rgba(238, 228, 218, 0.35);
+
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+
+    .tile-container {
+        position: absolute;
+        top: 10px;
+
+        .tile,
+        .tile .tile-inner {
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 50px;
+            font-weight: bold;
+            border-radius: 3px;
+            transition: all 0.1s ease-in-out;
+            animation-duration: 0.15s;
+        }
+
+        .tile.tile-new {
+            animation-name: scale;
+        }
+
+        .tile.tile-merged {
+            animation-name: scaleOut;
+            animation-duration: 0.3s;
+        }
+
+        .tile-128,
+        .tile-256,
+        .tile-512 {
+            font-size: 45px;
+        }
+
+        .tile-1024,
+        .tile-2048,
+        .tile-4096 {
+            font-size: 36px;
+        }
+    }
+}
+
+.overlay {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background-color: rgba(238, 228, 218, 0.73);
+    color: #776e65;
+    font-size: 44px;
+
+    button {
+        margin-top: 15px;
+        outline: none;
+        border: none;
+        padding: 12px 20px;
+        background-color: #8f7a66;
+        color: #f9f6f2;
+        font-size: 16px;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    span {
+        font-weight: bold;
+    }
+}
+
+@keyframes scale {
+    from {
+        transform: scale(0%);
+    }
+
+    to {
+        transform: scale(100%);
+    }
+}
+
+@keyframes scaleOut {
+    0% {
+        transform: scale(0%);
+    }
+
+    70% {
+        transform: scale(110%);
+    }
+
+    100% {
+        transform: scale(100%);
+    }
+}
