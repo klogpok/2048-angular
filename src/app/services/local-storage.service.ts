@@ -1,3 +1,4 @@
+import { Tile } from './../components/game/models/tile';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -21,5 +22,18 @@ export class LocalStorageService {
             this.bestScore = score;
             localStorage.setItem('bestScore', score.toString());
         }
+    }
+
+    getState() {
+        return JSON.parse(localStorage.getItem('state'));
+    }
+
+    saveState(tiles: Tile[], isTheEnd: boolean = false) {
+        const state = {
+            isTheEnd,
+            tiles,
+        };
+
+        localStorage.setItem('state', JSON.stringify(state));
     }
 }

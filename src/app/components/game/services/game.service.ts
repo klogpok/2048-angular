@@ -58,7 +58,7 @@ export class GameService {
         dimY: 'row' | 'col' = 'col',
         reverse = false
     ): void {
-        if (this.theEnd || !this.canIMove(dimX)) {
+        if (this.theEnd || !this.canIMove(dimX, false, reverse)) {
             return;
         }
 
@@ -115,8 +115,14 @@ export class GameService {
             if (this.isTheEnd()) {
                 setTimeout(() => {
                     this.theEnd = true;
+                    this.ls.saveState(
+                        this.tiles.filter((tile) => !tile.isOnDelete),
+                        true
+                    );
                 }, 1000);
             }
+
+            this.ls.saveState(this.tiles.filter((tile) => !tile.isOnDelete));
         }, 100);
     }
 
@@ -134,6 +140,21 @@ export class GameService {
 
             if (tilesIn.length !== this.boardSize) {
                 if (skipDir) {
+                    return true;
+                }
+
+                const length = tilesIn.length;
+                const lockedPositons: number[] = [];
+                const start = forward ? this.boardSize + 1 - length : 1;
+                const end = forward ? this.boardSize : length;
+
+                for (let y = start; y <= end; y++) {
+                    lockedPositons.push(y);
+                }
+
+                if (
+                    tilesIn.find((tile) => !lockedPositons.includes(tile[dimY]))
+                ) {
                     return true;
                 }
             }
