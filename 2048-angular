@@ -2,13 +2,13 @@
 📦 Build target "2048-angular:build:production"
 
 Initial Chunk Files           | Names         |  Raw Size | Estimated Transfer Size
-main.4c0879274a5dc1eb.js      | main          | 204.16 kB |                53.96 kB
+main.b52f2f4620944db8.js      | main          | 204.16 kB |                53.98 kB
 polyfills.0b2051bab497f371.js | polyfills     |  33.08 kB |                10.66 kB
 runtime.5ac340d77d3a4aae.js   | runtime       |   1.05 kB |               600 bytes
 styles.3aa38a50cd960d20.css   | styles        | 110 bytes |                89 bytes
 
-| Initial Total | 238.39 kB |                65.29 kB
+| Initial Total | 238.39 kB |                65.31 kB
 
-Build at: 2023-05-05T10:33:38.732Z - Hash: ca91aa823be57b57 - Time: 21172ms
+Build at: 2023-05-05T11:01:51.842Z - Hash: d38fc7fbe96257af - Time: 14048ms
 🚀 Uploading via git, please wait...
 🌟 Successfully published via angular-cli-ghpages! Have a nice day!
