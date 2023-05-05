@@ -18,8 +18,8 @@
             }
 
             .grid-cell {
-                width: 100px;
-                height: 100px;
+                width: 115px;
+                height: 115px;
                 margin-right: 10px;
                 border-radius: 3px;
                 background: rgba(238, 228, 218, 0.35);
@@ -37,13 +37,13 @@
 
         .tile,
         .tile .tile-inner {
-            width: 100px;
-            height: 100px;
+            width: 115px;
+            height: 115px;
             position: absolute;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 50px;
+            font-size: 56px;
             font-weight: bold;
             border-radius: 3px;
             transition: all 0.1s ease-in-out;
@@ -62,13 +62,13 @@
         .tile-128,
         .tile-256,
         .tile-512 {
-            font-size: 45px;
+            font-size: 50px;
         }
 
         .tile-1024,
         .tile-2048,
         .tile-4096 {
-            font-size: 36px;
+            font-size: 40px;
         }
     }
 }

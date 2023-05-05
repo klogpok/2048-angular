@@ -75,8 +75,8 @@ export class GameComponent implements OnInit {
 
     getTileStyle(tile: Tile) {
         return {
-            top: (tile.row - 1) * 110 + 'px',
-            left: (tile.col - 1) * 110 + 'px',
+            top: (tile.row - 1) * 125 + 'px',
+            left: (tile.col - 1) * 125 + 'px',
             backgroundColor: colors[tile.value].backgroundColor,
             color: colors[tile.value].color,
         };
