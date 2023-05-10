@@ -47,6 +47,14 @@ const colors: Record<number, TileStyle> = {
         backgroundColor: '#edc22e',
         color: '#f9f6f2',
     },
+    4096: {
+        backgroundColor: '#edc000',
+        color: '#f9f6f2',
+    },
+    8192: {
+        backgroundColor: '##b3930a',
+        color: '#7e6e5d',
+    },
 };
 
 @Component({

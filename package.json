@@ -7,7 +7,7 @@
         "build": "ng build",
         "watch": "ng build --watch --configuration development",
         "test": "ng test",
-        "deploy": "ng deploy --base-href=>2048-angular"
+        "deploy": "ng deploy --base-href \"https://klogpok.github.io/2048-angular/\""
     },
     "private": true,
     "dependencies": {
