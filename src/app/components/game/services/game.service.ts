@@ -30,6 +30,7 @@ export class GameService {
     }
 
     initNewGame(): void {
+        this.availableCells = [];
         this.tiles = [];
         this.score = 0;
         this.theEnd = false;
@@ -177,26 +178,50 @@ export class GameService {
         this.tiles = this.tiles.filter((tile) => !tile.isOnDelete);
     }
 
-    private generateTiles(lenght = 2): void {
+    /**
+     * Generates new tiles for the game.
+     * @param length The number of tiles to generate.
+     */
+    private generateTiles(length = 2): void {
+        // Make sure length is a valid number.
+        if (typeof length !== 'number' || length < 1) {
+            throw new Error('Length must be a number greater than 0');
+        }
+
+        // Get a random selection of empty cell positions
         const availableTilesPositions: number[] = this.emptyCells
             .sort(() => Math.random() - 0.5)
-            .slice(0, lenght);
+            .slice(0, length);
 
+        // Create new tiles with a value of 2 and the selected positions
         this.tiles = [
             ...this.tiles,
             ...availableTilesPositions.map<Tile>((position: number) => ({
                 value: 2,
-                row: (position - (position % 10)) / 10,
-                col: position % 10,
+                row: this.getPositionRow(position),
+                col: this.getPositionCol(position),
             })),
         ];
     }
 
+    getPositionRow(position: number): number {
+        return Math.floor(position / 10);
+    }
+
+    getPositionCol(position: number): number {
+        return position % 10;
+    }
+
     private generateAvailableCells(): void {
-        for (let row = 1; row <= this.boardSize; row++) {
-            for (let col = 1; col <= this.boardSize; col++) {
-                this.availableCells.push(row * 10 + col);
-            }
-        }
+        // Create a 2D array of cell positions.
+        const cells = Array.from({ length: this.boardSize }, (_, row) =>
+            Array.from(
+                { length: this.boardSize },
+                (_, col) => (row + 1) * 10 + col + 1
+            )
+        );
+
+        // Flatten the 2D array into a 1D array of cell positions.
+        this.availableCells = cells.flatMap((row) => row);
     }
 }
