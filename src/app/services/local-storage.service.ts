@@ -1,6 +1,12 @@
 import { Tile } from './../components/game/models/tile';
 import { Injectable } from '@angular/core';
 
+export interface IState {
+    isTheEnd: boolean;
+    tiles: Tile[];
+    score: number;
+}
+
 @Injectable({
     providedIn: 'root',
 })
@@ -24,16 +30,21 @@ export class LocalStorageService {
         }
     }
 
-    getState() {
+    getState(): IState | null {
         return JSON.parse(localStorage.getItem('state'));
     }
 
-    saveState(tiles: Tile[], isTheEnd: boolean = false) {
-        const state = {
+    saveState(tiles: Tile[], isTheEnd: boolean = false, score: number): void {
+        const state: IState = {
             isTheEnd,
             tiles,
+            score,
         };
 
         localStorage.setItem('state', JSON.stringify(state));
+    }
+
+    clearState(): void {
+        localStorage.setItem('state', null);
     }
 }
