@@ -25,6 +25,7 @@ export class GameComponent implements OnInit {
 
     ngOnInit() {
         this.colorSchema = this.colorSchemaService.getColorSchema();
+        this.gs.initGame();
     }
 
     @HostListener('document:keydown', ['$event'])

@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { LocalStorageService } from 'src/app/services/local-storage.service';
+import {
+    IState,
+    LocalStorageService,
+} from 'src/app/services/local-storage.service';
 import { Tile } from '../models/tile';
 
 @Injectable({
@@ -25,17 +28,26 @@ export class GameService {
         return this.tiles.map((tile) => tile.row * 10 + tile.col);
     }
 
-    constructor(private ls: LocalStorageService) {
-        this.initNewGame();
-    }
+    constructor(private ls: LocalStorageService) {}
 
-    initNewGame(): void {
-        this.availableCells = [];
-        this.tiles = [];
-        this.score = 0;
-        this.theEnd = false;
-        this.generateAvailableCells();
-        this.generateTiles();
+    initGame(isNewGame = false): void {
+        const state: IState | null = this.ls.getState();
+
+        if (state && !isNewGame) {
+            const localState = this.ls.getState();
+            this.score = localState.score;
+            this.theEnd = localState.isTheEnd;
+            this.tiles = localState.tiles;
+            this.generateAvailableCellsByTiles(this.tiles);
+        } else {
+            this.availableCells = [];
+            this.tiles = [];
+            this.score = 0;
+            this.theEnd = false;
+            this.generateAvailableCells();
+            this.generateTiles();
+            this.ls.clearState();
+        }
     }
 
     right(): void {
@@ -113,17 +125,22 @@ export class GameService {
         setTimeout(() => {
             this.generateTiles(1);
 
-            if (this.isTheEnd()) {
+            if (!this.isTheEnd()) {
+                this.ls.saveState(
+                    this.tiles.filter((tile) => !tile.isOnDelete),
+                    false,
+                    this.score
+                );
+            } else {
                 setTimeout(() => {
                     this.theEnd = true;
                     this.ls.saveState(
                         this.tiles.filter((tile) => !tile.isOnDelete),
-                        true
+                        true,
+                        this.score
                     );
                 }, 1000);
             }
-
-            this.ls.saveState(this.tiles.filter((tile) => !tile.isOnDelete));
         }, 100);
     }
 
@@ -210,6 +227,23 @@ export class GameService {
 
     getPositionCol(position: number): number {
         return position % 10;
+    }
+
+    private generateAvailableCellsByTiles(tiles: Tile[]): void {
+        const cells = Array.from({ length: this.boardSize }, (_, row) =>
+            Array.from(
+                { length: this.boardSize },
+                (_, col) => (row + 1) * 10 + col + 1
+            )
+        );
+
+        const cells2: number[] = tiles.map(
+            (tile: Tile) => tile.row * 10 + tile.col
+        );
+
+        this.availableCells = cells
+            .flatMap((row) => row)
+            .filter((item) => !cells2.includes(item));
     }
 
     private generateAvailableCells(): void {
