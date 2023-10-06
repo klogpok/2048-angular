@@ -145,47 +145,83 @@ export class GameService {
     }
 
     private isTheEnd(): boolean {
+        console.log(!this.canIMove('row'), !this.canIMove('col'));
         return !this.canIMove('row') && !this.canIMove('col');
     }
 
     private canIMove(dimX: 'row' | 'col', skipDir = true, forward = false) {
+        // Determine the other dimension (either row or column) based on the chosen dimension
         const dimY = dimX === 'row' ? 'col' : 'row';
 
+        // Iterate over all rows or columns in the board
         for (let i = 1; i <= this.boardSize; i++) {
-            const tilesIn = this.tiles
+            // Filter tiles in the current row or column and sort them based on the other dimension
+            const tilesInDimension = this.tiles
                 .filter((tile) => !tile.isOnDelete && tile[dimX] === i)
                 .sort((a, b) => a[dimY] - b[dimY]);
 
-            if (tilesIn.length !== this.boardSize) {
+            // Check for empty positions in the row or column
+            if (tilesInDimension.length !== this.boardSize) {
+                // If skipping is allowed and there are empty positions, return true
                 if (skipDir) {
                     return true;
                 }
 
-                const length = tilesIn.length;
-                const lockedPositons: number[] = [];
-                const start = forward ? this.boardSize + 1 - length : 1;
-                const end = forward ? this.boardSize : length;
+                // Generate locked positions for the tiles in the row or column
+                const length = tilesInDimension.length;
+                const lockedPositions = this.generateLockedPositions(
+                    length,
+                    forward
+                );
 
-                for (let y = start; y <= end; y++) {
-                    lockedPositons.push(y);
-                }
-
+                // If there is a tile not on a locked position, return true
                 if (
-                    tilesIn.find((tile) => !lockedPositons.includes(tile[dimY]))
+                    tilesInDimension.find(
+                        (tile) => !lockedPositions.includes(tile[dimY])
+                    )
                 ) {
                     return true;
                 }
             }
 
-            let prevValue = 0;
-
-            for (const tile of tilesIn) {
-                if (tile.value === prevValue) {
-                    return true;
-                }
-
-                prevValue = tile.value;
+            // Check for tiles with duplicate values in the row or column
+            if (this.hasDuplicateValues(tilesInDimension)) {
+                return true;
             }
+        }
+
+        // If there are no immovable tiles and no duplicate values, return false
+        return false;
+    }
+
+    // Generate locked positions for the tiles in a row or column
+    private generateLockedPositions(
+        length: number,
+        forward: boolean
+    ): number[] {
+        const lockedPositions: number[] = [];
+        const start = forward ? this.boardSize + 1 - length : 1;
+        const end = forward ? this.boardSize : length;
+
+        // Generate locked positions from start to end
+        for (let y = start; y <= end; y++) {
+            lockedPositions.push(y);
+        }
+
+        return lockedPositions;
+    }
+
+    // Check for tiles with duplicate values
+    private hasDuplicateValues(tiles: Tile[]): boolean {
+        let prevValue = 0;
+
+        // Iterate over all tiles and check for duplicate values
+        for (const tile of tiles) {
+            if (tile.value === prevValue) {
+                return true;
+            }
+
+            prevValue = tile.value;
         }
 
         return false;
